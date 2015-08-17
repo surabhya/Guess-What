@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+ 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
+        <title>  Guess What ?!? </title>
+    </head>
+	<body onload= "display_question()">
+
+	<div data-role="page" id="welcome_page"> 
+
+		<div data-role="header" class="ui-content">
+			<h1> Guess What ?!? </h1>
+		</div>
+
+		<div data-role="main" class="ui-content">
+			<p align="center"> <img src="logo.png" alt="logo" height="400px" width="300px"> </p>
+		</div>
+
+		<div data-role="footer" class="ui-content"> 
+			<h1> <a href="#first_page" class="ui-btn"> Start Guessing ! </a> </h1> 
+		</div>
+
+	</div>
+  
+  	<div data-role="page" id="first_page" > 
+
+  		<div data-role="header" class="ui-content">
+			<p align="center"> Guess What ?!? </p>
+		</div>
+
+		<div data-role="main" class="ui-content">
+			<b> <p align="center" id="answer"> Guees Your First Answer. </p> </b>
+			<p align="center" id="question"> </p> 
+		    <input type="text" id="ans" data-clear-btn="true" placeholder="                                                                                                                                        Guess What ?!?"> 
+			<button onclick= "verify_answer()"> Submit Answer </button>
+			<b> <p align="center" id="score"> Current Score: 0 </p> </b>
+		</div>
+
+		<div data-role="footer" class="ui-content" >
+			<p align="center" > 
+			<a href="#quit_button" class="ui-btn ui-icon-delete ui-btn-icon-left"> Quit Game </a> 
+			<button onclick="change_all()" class="ui-btn ui-icon-arrow-r ui-btn-icon-right"> Next Question </button>
+			</p> 
+		</div>
+	
+	</div>
+
+  	<div data-role="page" data-dialog="true" id="quit_button">
+
+  	 	<div data-role="header" class="ui-content">
+    		<p align="center"> Quit? </p>
+  		</div>
+
+  		<div data-role="main" class="ui-content">
+    		<p align="center"> Are you sure you want to Quit? </p>
+    		<a href="#first_page" class="ui-btn ui-icon-back ui-btn-icon-left"> Go Back </a>
+    		<a href="#" class="ui-btn ui-icon-delete ui-btn-icon-left"> Yes </a>
+  		</div>
+
+     	<div data-role="footer" class="ui-content">
+     	
+     	</div> 
+	
+	</div>
+
+	<div data-role="page" data-dialog="true" id="next_button">
+
+		<div data-role="header" class="ui-content">
+  		</div>
+
+  		<div data-role="main" class="ui-content">
+  			<p align="center"> <b> Congratulations! </b> </p>
+    		<p align="center"> Guess The Next One </p>
+    		<a href="#first_page" class="ui-btn ui-icon-arrow-r ui-btn-icon-left" onclick="change_all()"> Guess Next One </a>
+  		</div>
+
+  		<div data-role="footer" class="ui-content"> 
+
+  		</div>
+
+	</div> 
+
+	<script>
+
+		var answer;
+		var score = 0; 
+
+		list_of_questions = ["There is a word which when reads upside or down or even backward or forward reads the same. Can you tell identify 				the word?",
+							"I know something such that even if you take whole, some still remains.Do you know that word?",
+							"First you throw the outside, then cook the inside. Then you eat the outside and now throw the inside. What am I?",
+							"There is a five letter word which has 3 consonants (all are same) and 2 different vowels. Also something wrong associated with the word. Can you name it?",
+							"I have three eyes in a straight line. All my eyes are of different colors. When my red eye opens, everything freezes. Who Am I? ",
+							"I always comes but never arrives. What Am I?",
+							"I am as light as a feather, yet the strongest person not able to hold me for more than two minute. What am I? ",
+							"Can you find a 10 letter word in English language which can be typed using only the 1st rows of the computer keyboard? ",
+							"Can you tell us an English word which contains of all the five vowels (a, e, i, o, u) ?",
+							"There is no flesh, no feathers, no scales and no bone. What sorcery is this that they still have fingers and thumbs of their own? Who are they?",
+							"When i was invented, you can looking through the walls.What am I?",
+							"I live in a land resided by thirty men and two women. All of us dress up in classic black and white apparels. The moment one of us moves, a battle begins. Do you have an idea where I live?",
+							"You throw me out when you want to use me and you take me in when you don't want to use me. What Am I ?",
+							"I happily drive my customer away. Who am I ?",
+							"Which word in English dictionary which has a silent z ?",
+							"I know a word which is pronounced incorrectly even by best of scholars. Do you ?",
+							"I am a prime number and square of the number is same as twice the number. What am I ?",
+							"You can take four of the five letters out of this word, but the pronunciation never changes. What is the word?",
+							"I am an odd number; take away an alphabet and I become even. What number am I?",
+							"I look at you, you look at me I raise my right,you raise your left. What am I ?",
+							"I am a seven letter word but if you remove four of my letters I will have one left? What word am I?",
+							"I go all around the world but always remain in the corner. What am I?",
+							"I have four wings but they don't enable me to fly. You will never find me laughing or crying. Whenever you look at me, I will be at the exact same place. I keep toiling day and night making a little sound. Who I am?",
+							"I can be heard but still no one has ever touched me or seen me. Who am I?",
+							"Numerous holes lie within me but still I am very much capable of holding water. What am I?",
+							"I surely can't get any more wetter, no matter how much rain falls on me. What Am I ?",
+							"I can die but can't live. Who am i ?", 
+							"I am a golden treasure hidden inside a white box with no key. Who am i ?",
+							"The more you take, the more you leave behind. What am I ?",
+							"I have hands but i cannot clap. Who am I ?"];
+
+		list_of_answers = ["noon","wholesome","corn","error","spotlight","tomorrow","breath","typewritter","unquestionably","gloves","window",
+							"chess board","anchor","taxi driver","rendezvous","incorrectly","2","queue","7","mirror","someone","stamp","windmill","voice","sponge","water","battery","egg","footsteps","clock"];
+
+		total_length = list_of_answers.length;
+
+		function change_correct() {
+			location = '#next_button';
+		}
+
+
+		function change_some() {
+
+			document.getElementById("ans").value = "";
+		}
+
+		function change_all() {
+
+				document.getElementById("ans").value = "";
+				document.getElementById("answer").innerHTML = "Here Is The Next Question."; 
+				display_question(); 
+		}
+
+		function display_question(){
+
+			question_number = parseInt( Math.random() * (list_of_questions.length) );
+			document.getElementById("question").innerHTML = list_of_questions[question_number];	
+		}
+
+		function verify_answer() {
+
+			answer = document.getElementById("ans").value.toLowerCase(); 
+			answer = answer.trim(); 
+
+			if (answer != "") {
+				
+					if (answer == list_of_answers[question_number]) {
+					document.getElementById("answer").innerHTML = "Congratulation, Correct Guess. Try Next One"; 
+					document.getElementById("score").innerHTML = "Current Score: " + (score = score + 1); 
+					change_correct();  	
+
+					} else {
+
+					document.getElementById("answer").innerHTML = "Sorry, Incorrect Guess. Try Again"; 
+					document.getElementById("score").innerHTML = "Current Score: " + (score); 
+					change_some();
+
+					}
+			}
+	
+		}
+	</script>
+
+	</body>
+
+</html>
